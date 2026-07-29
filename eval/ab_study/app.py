@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import random
+import secrets
 import sqlite3
 import uuid
 from contextlib import contextmanager
@@ -9,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -19,6 +20,7 @@ TOKENS_PATH = Path(os.environ.get("AB_TOKENS", "tokens.json"))
 IP_SALT = os.environ.get("AB_IP_SALT", "dev-salt")
 ALLOW_OPEN = os.environ.get("AB_ALLOW_OPEN", "0") == "1"
 SESSION_CAP_PER_IP = int(os.environ.get("AB_SESSION_CAP", "10"))
+EXPORT_TOKEN = os.environ.get("AB_EXPORT_TOKEN", "")  # unset = endpoint disabled
 
 EXPERIENCE_BRACKETS = {"none", "casual", "1-4digit", "5-6digit", "lapsed"}
 # none: never played | casual: plays, unranked/low | 1-4digit / 5-6digit:
@@ -27,7 +29,7 @@ EXPERIENCE_BRACKETS = {"none", "casual", "1-4digit", "5-6digit", "lapsed"}
 app = FastAPI(title="osunator A/B study", docs_url=None, redoc_url=None)
 
 
-# storage
+# ---------------------------------------------------------------- storage
 
 def utcnow() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -110,7 +112,7 @@ def startup() -> None:
     TOKENS = load_tokens()
 
 
-# models
+# ---------------------------------------------------------------- models
 
 class SessionIn(BaseModel):
     experience: str
@@ -128,7 +130,7 @@ class SubmitIn(BaseModel):
     rater_id: str
 
 
-# helpers
+# ---------------------------------------------------------------- helpers
 
 def ip_hash(request: Request) -> str:
     fwd = request.headers.get("x-forwarded-for", "")
@@ -143,7 +145,7 @@ def get_rater(conn, rater_id: str):
     return row
 
 
-# routes
+# ---------------------------------------------------------------- routes
 
 @app.post("/api/session")
 def create_session(body: SessionIn, request: Request):
@@ -264,6 +266,22 @@ def submit(body: SubmitIn):
         for r in rows
     ]
     return {"score": correct, "total": len(rows), "reveal": reveal}
+
+
+@app.get("/admin/export")
+def export_db(token: str = ""):
+    """Download the raw SQLite file. Disabled unless AB_EXPORT_TOKEN is set.
+
+    Constant-time comparison so the token can't be recovered by timing.
+    """
+    if not EXPORT_TOKEN:
+        raise HTTPException(404, "not found")
+    if not secrets.compare_digest(token, EXPORT_TOKEN):
+        raise HTTPException(403, "forbidden")
+    if not DB_PATH.exists():
+        raise HTTPException(404, "no database yet")
+    return FileResponse(DB_PATH, media_type="application/octet-stream",
+                        filename="study.db")
 
 
 @app.get("/")
