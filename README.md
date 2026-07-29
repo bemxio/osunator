@@ -60,30 +60,32 @@ Blinded two-alternative forced-choice study: raters watched a pair of ~30 s clip
 same map and same section, and picked the one they
 believed was human. 10 pairs per rater.
 
-**Interim results (collection ongoing): 164 raters, 1,640 judgments.**
+**199 raters, 1,990 judgments.** Confidence intervals are clustered by rater
+(a rater's ten answers are not ten independent observations).
 
-| Group | n raters | Accuracy | 95% CI (rater-clustered) |
+| Group | n raters | Accuracy | 95% CI |
 |---|---|---|---|
-| **Pooled** | **164** | **65.0%** | **[62.0, 68.0]** |
-| Ranked, 1–4 digit | 65 | 69.1% | [64.1, 74.1] |
-| Ranked, 5–6 digit | 73 | 61.9% | [57.9, 66.0] |
-| Lapsed (played seriously, since quit) | 15 | 66.7% | [57.2, 76.2] |
+| Ranked, 1–4 digit | 69 | 69.3% | [64.5, 74.0] |
+| Lapsed (played seriously, since quit) | 18 | 67.2% | [58.3, 76.2] |
+| Ranked, 5–6 digit | 87 | 61.3% | [57.5, 65.0] |
 | Casual | 8 | 55.0% | [39.7, 70.3] |
-| Never played | 3 | 70.0% | — (underpowered) |
+| Never played | 17 | 48.2% | [40.9, 55.6] |
+| **Pooled** | **199** | **63.2%** | **[60.5, 65.9]** |
 
-Raters familiar with the game detect generated replays well above chance, and the
-effect appears to track *exposure* rather than current skill: lapsed players, who
-retain the perceptual knowledge but not the mechanics, perform in the same range
-as active ranked players. The casual and never-played brackets are currently too
-small to support a claim in either direction; recruitment targeting non-players
-is ongoing.
+Raters who have never played the game perform at chance: generated replays pass
+for human to an untrained observer. Everyone with real exposure to osu! detects
+them well above chance, and detection tracks *familiarity* rather than current
+skill, with lapsed players performing in the same range as active ranked ones.
+(The casual bracket is too small to support a claim in either direction.)
 
-Per-rater scores within the ranked brackets look bimodal rather than uniformly
-shifted, several perfect 10/10 alongside near-chance results suggesting
-detection relies on specific learnable artifacts rather than a diffuse
-impression.
+Detectability also varies by beatmap. Eight of the ten test maps were identified
+above chance, up to 73.9%, while two were not distinguishable from a coin flip
+(51.3% and 48.7%, both p ≈ 0.78); consistent with detection resting on specific
+recurring artifacts rather than a general impression of non-humanness. Thirty-one
+raters scored 9/10 or better, so the tells are reliably learnable by some.
 
-Harness, methodology, exclusions and data: [`eval/ab_study/`](eval/ab_study/).
+Harness, methodology, exclusions and anonymized data:
+[`eval/ab_study/`](eval/ab_study/).
 
 ## Docker Setup
 
