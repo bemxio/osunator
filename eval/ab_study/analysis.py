@@ -8,7 +8,7 @@ from pathlib import Path
 DB = sys.argv[1] if len(sys.argv) > 1 else "study.db"
 PAIRS_PATH = sys.argv[2] if len(sys.argv) > 2 else "pairs.json"
 
-Z = 1.959963985  # 95%
+Z = 1.959963985
 
 
 # ---------------------------------------------------------------- statistics
