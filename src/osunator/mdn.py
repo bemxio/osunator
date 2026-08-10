@@ -131,10 +131,6 @@ class CorrelatedSampler:
     white at a given T, different color. Mirrors the training-side OU
     perturbation (recovery from smooth drift <-> production of it).
 
-    Measured: T=0 bit-identical to sample_mdn greedy; noise lag-1 autocorr
-    0.938 vs -0.004 white; flip rate 10.8% vs 49.9% (= arccos(rho)/pi);
-    std within ~2% of sigma*T for both.
-
     Lifecycle: eps is per-replay — reset() before each generation, paired
     with the LSTM reset. __init__ calls reset(); init is stationary, not
     zeros (early ticks shouldn't be calmer than steady state).
