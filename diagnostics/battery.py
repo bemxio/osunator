@@ -83,6 +83,20 @@ def pick_from_manifest(name_substr=None, split=None, seed=0):
           f"{len(by_map[chosen_map])} replays for this map)\n")
     return row
 
+def row_from_paths(beatmap_path, replay_path):
+    """Build a manifest-shaped row from explicit paths, for maps that are not
+    in the manifest at all (the 2AFC study maps)."""
+    bm = slider.beatmap.Beatmap.from_path(beatmap_path)
+    bid = getattr(bm, "beatmap_id", None)
+    if bid is None:
+        with open(beatmap_path, "rb") as f:
+            bid = "h" + hashlib.md5(f.read()).hexdigest()[:12]
+    name = f"{bm.artist} - {bm.title} [{bm.version}]"
+    print(f"picked: {name}  [split=off-manifest]")
+    print(f"human:  {replay_path}\n")
+    return {"beatmap_path": str(beatmap_path), "replay_path": str(replay_path),
+            "beatmap_id": str(bid), "beatmap_name": name, "split": "off-manifest"}
+
 
 # -------------------------------------------------------------- generation --
 
@@ -306,9 +320,17 @@ def main():
     ap.add_argument("--split", default=None, choices=("train", "test"))
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--temp", type=float, default=0.0)
+    ap.add_argument("--beatmap", default=None, help=".osu path (bypasses the manifest)")
+    ap.add_argument("--replay", default=None, help=".osr path (requires --beatmap)")
     args = ap.parse_args()
 
-    row = pick_from_manifest(args.name, args.split, args.seed)
+    if args.beatmap or args.replay:
+        if not (args.beatmap and args.replay):
+            raise SystemExit("--beatmap and --replay must be given together")
+        row = row_from_paths(args.beatmap, args.replay)
+    else:
+        row = pick_from_manifest(args.name, args.split, args.seed)
+
     beatmap, map_hash, result = load_or_generate(row, args.temp)
     human_replay = Replay.from_path(row["replay_path"])
     example = build_training_example(beatmap, human_replay)
