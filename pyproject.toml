@@ -9,7 +9,7 @@ dependencies = [
     "ossapi==5.3.5",
     "pandas>=2.3.3",
     "python-dotenv>=1.2.2",
-    "slider>=0.8.4",
+    "slider",
     "tensorflow[and-cuda]>=2.21.0",
     "tqdm>=4.68.3",
 ]
@@ -20,6 +20,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/osunator"]
+
+[tool.uv.sources]
+slider = { git = "https://github.com/bemxio/slider" }
 
 [dependency-groups]
 eval = [
