@@ -13,6 +13,7 @@ MODEL_PATH = ROOT / "best_model.keras"
 MOD_MAP = {
     "NM": Mod.NoMod,
     "NF": Mod.NoFail,
+    "EZ": Mod.Easy,
     "HD": Mod.Hidden,
     "SD": Mod.SuddenDeath,
     "DT": Mod.DoubleTime,
