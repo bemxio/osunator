@@ -47,7 +47,7 @@ def slider_position(slider_obj: Slider, timestamp: float) -> tuple[float, Positi
     repeat = slider_obj.repeat # single pass = 1, multiple passes >= 2
 
     scaled = global_progress * repeat
-    pass_index = int(scaled) # Which pass is the slider ball currently at
+    pass_index = int(scaled if not np.isnan(scaled) else 0) # Which pass is the slider ball currently at
     local_progress = scaled - pass_index # Fraction of the current pass (0 at start, 1 at end)
 
     if pass_index >= repeat: # Handles global_progress == 1.0, it would index a pass that doesn't exist
