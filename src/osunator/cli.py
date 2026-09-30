@@ -78,9 +78,9 @@ def main() -> None:
     parser = ArgumentParser(prog="osunator", description="osu! AI deteministic replay generator")
 
     parser.add_argument("filename", type=valid_file, help="Path to the .osu beatmap file.")
-    parser.add_argument("--mods", default=["SO"], type=str, choices=MOD_MAP.keys(), nargs="+", help="Mods to apply to the replay, seperated by a space.")
+    parser.add_argument("--mods", "-m", default=["SO"], type=str, choices=MOD_MAP.keys(), nargs="+", help="Mods to apply to the replay, seperated by a space.")
     parser.add_argument("--username", "-u", type=str, default="Osunator", help="Username of the player in the replay.")
-    parser.add_argument("--output", "-o", type=valid_dir, help="Output directory for generated replays. Defaults to the current directory.", default="./")
+    parser.add_argument("--output", "-o", type=valid_dir, help="Output directory for generated replays. Defaults to 'out'.", default="out/")
     parser.add_argument("--temperature", "-t", type=valid_temp, default=0.0, help="Amount of noise to add to the cursor. Recommended range is 0.0-0.3.")
 
     args = parser.parse_args()
