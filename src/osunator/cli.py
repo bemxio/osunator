@@ -24,7 +24,7 @@ MOD_MAP = {
     "PF": Mod.Perfect,
 }
 
-def process_replay(filename: str, mods: Mod, username: str, output: Path, temperature: float):
+def process_replay(filename: str, mods: Mod, username: str, output: Path, temperature: float) -> None:
     # Tensorflow is slow to import, so we do it here
     from osunator.generate import generate_replay, result_to_replay
     from tensorflow import keras
@@ -44,7 +44,7 @@ def process_replay(filename: str, mods: Mod, username: str, output: Path, temper
     replay.write_path(output / f"{filename.stem}.osr")
     print(f"wrote {output / f"{filename.stem}.osr"}")
 
-def valid_file(arg: str):
+def valid_file(arg: str) -> Path:
     path = Path(arg)
 
     if not path.exists():
@@ -56,7 +56,7 @@ def valid_file(arg: str):
 
     return path
 
-def valid_dir(arg: str):
+def valid_dir(arg: str) -> Path:
     path = Path(arg)
 
     if not path.exists():
@@ -66,7 +66,7 @@ def valid_dir(arg: str):
 
     return path
 
-def valid_temp(arg: str):
+def valid_temp(arg: str) -> float:
     temperature = float(arg)
 
     if temperature < 0:
@@ -74,7 +74,7 @@ def valid_temp(arg: str):
 
     return temperature
 
-if __name__ == "__main__":
+def main() -> None:
     parser = ArgumentParser(prog="osunator", description="osu! AI deteministic replay generator")
 
     parser.add_argument("filename", type=valid_file, help="Path to the .osu beatmap file.")
@@ -87,3 +87,6 @@ if __name__ == "__main__":
     mods = reduce(or_, (MOD_MAP[mod] for mod in args.mods), Mod.NoMod)
 
     process_replay(args.filename, mods, args.username, args.output, args.temperature)
+
+if __name__ == "__main__":
+    main()
