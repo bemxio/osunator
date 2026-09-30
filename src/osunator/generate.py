@@ -106,7 +106,7 @@ def full_alternate(grid_length, onset_prob, offset_prob, time_to_next_ms,
         keys_per_tick.append(k)
     return keys_per_tick
 
-def result_to_replay(result, beatmap_hash, username="osunator-bot", mod=Mod.NoFail):
+def result_to_replay(result, beatmap_hash, username="osunator-bot", mods=Mod.SpunOut):
     grid = result['grid']
     pred_x = result['pred_cursor_x']
     pred_y = result['pred_cursor_y']
@@ -142,7 +142,7 @@ def result_to_replay(result, beatmap_hash, username="osunator-bot", mod=Mod.NoFa
         replay_hash="",                 # not validated locally; left empty
         count_300=0, count_100=0, count_50=0, count_geki=0, count_katu=0, count_miss=0,
         score=0, max_combo=0, perfect=False,   # placeholders — no hit-judgement simulation exists
-        mods=mod,
+        mods=mods,
         life_bar_graph=None,
         timestamp=datetime.now(timezone.utc),
         replay_data=replay_data,
