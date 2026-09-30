@@ -26,7 +26,7 @@ def reset_all_states(model):
             layer.reset_states()
 
 
-def generate_replay(model, beatmap, stats, start_x=256.0, start_y=192.0, temperature=0.0):
+def generate_replay(model, beatmap, stats, temperature=0.0, start_x=256.0, start_y=192.0):
     grid = build_grid(beatmap)
     map_feats = resample_map_features(beatmap, grid)
     sampler = CorrelatedSampler(temperature=temperature)
@@ -136,7 +136,7 @@ def result_to_replay(result, beatmap_hash, username="Osunator", mods=Mod.SpunOut
 
     return Replay(
         mode=GameMode.STD,
-        game_version=20260412,          # arbitrary but plausible osu client version number
+        game_version=20260924,          # arbitrary but plausible osu client version number
         beatmap_hash=beatmap_hash,      # REAL hash, associates this replay with the correct map
         username=username,
         replay_hash="",                 # not validated locally; left empty
@@ -147,7 +147,7 @@ def result_to_replay(result, beatmap_hash, username="Osunator", mods=Mod.SpunOut
         timestamp=datetime.now(timezone.utc),
         replay_data=replay_data,
         replay_id=0,
-        rng_seed=473358,                  # random value, used one from a random human replay
+        rng_seed=0,                     # random value, used one from a random human replay
     )
 
 def predict_replay(model, beatmap, replay, stats, temperature=0.0):
