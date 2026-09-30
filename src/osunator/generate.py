@@ -126,8 +126,12 @@ def result_to_replay(result, beatmap_hash, username="osunator-bot", mod=Mod.NoFa
     # off-screen, then the lead-in delta on the first real frame)
     replay_data = [ReplayEventOsu(0, 256.0, -500.0, Key(0))]
     replay_data += [
-        ReplayEventOsu(int(time_deltas[t]), float(pred_x[t]), float(pred_y[t]), keys_per_tick[t])
-        for t in tqdm(range(n), desc="building replay events")
+        ReplayEventOsu(
+            int(time_deltas[t]),
+            float(pred_x[t]) if not np.isnan(pred_x[t]) else 256.0,
+            float(pred_y[t]) if not np.isnan(pred_y[t]) else -500.0,
+            keys_per_tick[t]
+        ) for t in tqdm(range(n), desc="building replay events")
     ]
 
     return Replay(
