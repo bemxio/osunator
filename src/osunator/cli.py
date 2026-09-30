@@ -64,14 +64,15 @@ def main():
     parser.add_argument('--temperature', '-t', type=valid_temp, default=0.0, help='Amount of noise to add to the cursor (recommended [0-0.3])')
 
     args = parser.parse_args()
-
     mod = MOD_MAP[args.mod]
 
-    try:
-        process_replay(args.filename, mod, args.output, args.temperature)
-    except Exception as e:
-        print(f"error: {e}", file=sys.stderr)
-        sys.exit(1)
+    process_replay(args.filename, mod, args.output, args.temperature)
+
+    #try:
+    #    process_replay(args.filename, mod, args.output, args.temperature)
+    #except Exception as e:
+    #    print(f"error: {e}", file=sys.stderr)
+    #    sys.exit(1)
 
 
 if __name__ == '__main__':
